@@ -61,12 +61,12 @@ trainData.on("child_added", function(snapshot) {
 	console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
 	// Next Train
 	var nextTrain = moment().add(tMinutesTillTrain, "minutes")
-	console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"))
-	
+	nextTrain = moment(nextTrain).format("hh:mm");
+	console.log("ARRIVAL TIME: " + nextTrain);
 	// add all train information to an array for easy use
 	// Use the moment caculated items and add them to the array 
 	// May need a new function to hodl thsi information.  
-	var trainInfo = [snapshot.val().name, snapshot.val().destination, snapshot.val().time, snapshot.val().frequency,tMinutesTillTrain];
+	var trainInfo = [snapshot.val().name, snapshot.val().destination, tFrequency, nextTrain,tMinutesTillTrain];
 	console.log(trainInfo);
 	//create a for loop to easily create a new table data with  the HTMl from the inputed value 
 	for(var i = 0; i < trainInfo.length;i++){
