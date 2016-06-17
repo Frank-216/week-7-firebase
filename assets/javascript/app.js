@@ -39,8 +39,34 @@ trainData.on("child_added", function(snapshot) {
 
 	// Create a new Table row. outside of the for loop 	
 	var tableRow = $('<tr>');	
-	// add all train information to an array for easy use 
-	var trainInfo = [snapshot.val().name, snapshot.val().destination, snapshot.val().time, snapshot.val().frequency];
+
+	// Create a variable to store information for the time & frequency 
+	var firstTime = snapshot.val().time;
+	var tFrequency= snapshot.val().frequency;
+	// turn frequency into a number 
+	tFrequency = parseInt(tFrequency);
+	// convert string of military time to a moment item.  
+	var firstTimeConverted = moment(firstTime,"hh:mm").subtract(1, "years");
+	// use moment to calculate current time 
+	var currentTime = moment();
+	console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+	//Caculate difference between times in minutes 
+	var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+	console.log("DIFFERENCE IN TIME: " + diffTime);
+	//Time apart (remainder)
+	var tRemainder = diffTime % tFrequency;
+	console.log(tRemainder);
+	//Minute Until next sTrain
+	var tMinutesTillTrain = tFrequency - tRemainder;
+	console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+	// Next Train
+	var nextTrain = moment().add(tMinutesTillTrain, "minutes")
+	console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"))
+	
+	// add all train information to an array for easy use
+	// Use the moment caculated items and add them to the array 
+	// May need a new function to hodl thsi information.  
+	var trainInfo = [snapshot.val().name, snapshot.val().destination, snapshot.val().time, snapshot.val().frequency,tMinutesTillTrain];
 	console.log(trainInfo);
 	//create a for loop to easily create a new table data with  the HTMl from the inputed value 
 	for(var i = 0; i < trainInfo.length;i++){
